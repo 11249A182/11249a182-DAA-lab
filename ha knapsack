@@ -1,0 +1,44 @@
+#include<stdiop.h>
+struct Item {
+    int value;
+    int weight;
+};
+void swap(struct Item *a, struct Item *b) {
+    struct Item temp = *a;
+    *a = *b;
+    *b = temp;
+}
+void sort(struct Item arr[], int n) {
+    int i, j;
+    for (i = 0; i < n - 1; i++) {
+        for (j = i + 1; j < n; j++) {
+            float r1 = (float)arr[i].value / arr[i].weight;
+            float r2 = (float)arr[j].value / arr[j].weight;
+            if (r1 < r2) {
+                swap(&arr[i], &arr[j]);
+            }
+        }
+    }
+}
+float fractionalKnapsack(int W, struct Item arr[], int n) {
+    sort(arr, n);
+    float totalValue = 0.0;
+    for (int i = 0; i < n; i++) {
+        if (W >= arr[i].weight) {
+            W -= arr[i].weight;
+            totalValue += arr[i].value;
+        } else {
+            totalValue += arr[i].value * ((float)W / arr[i].weight);
+            break;
+        }
+    }
+    return totalValue;
+}
+int main() {
+    int n = 3;
+    struct Item arr[] = {{60, 10}, {100, 20}, {120, 30}};
+    int W = 50;
+    printf("Maximum value in Knapsack = %.2f",
+           fractionalKnapsack(W, arr, n));
+    return 0;
+}
