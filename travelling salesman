@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include <limits.h>
+#define MAX 10
+int n;
+int graph[MAX][MAX];
+int visited[MAX];
+int min(int a, int b) {
+    return (a < b) ? a : b;
+}
+int tsp(int city, int count, int cost) {
+    if (count == n && graph[city][0]) {
+        return cost + graph[city][0];
+    }
+    int ans = INT_MAX;
+    for (int i = 0; i < n; i++) {
+        if (!visited[i] && graph[city][i]) {
+            visited[i] = 1;
+            ans = min(ans, tsp(i, count + 1, 
+                      cost + graph[city][i]));
+            visited[i] = 0;
+        }
+    }
+    return ans;
+}
+int main() {
+    printf("Enter number of cities: ");
+    scanf("%d", &n);
+    printf("Enter distance matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &graph[i][j]);
+        }
+    }
+    visited[0] = 1;
+    int minimum_cost = tsp(0, 1, 0);
+    printf("Minimum Travelling Cost = %d\n", minimum_cost);
+    return 0;
+}
